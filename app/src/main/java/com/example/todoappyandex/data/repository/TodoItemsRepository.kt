@@ -1,4 +1,4 @@
-package com.example.todoappyandex.presentation.ui
+package com.example.todoappyandex.data.repository
 
 import com.example.todoappyandex.domain.model.TodoItem
 import kotlinx.coroutines.flow.MutableStateFlow
