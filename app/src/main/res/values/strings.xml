@@ -1,0 +1,12 @@
+<resources>
+    <string name="app_name">ToDo App Yandex</string>
+    <string name="todo_info">todo_info</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="my_todolist">Мои дела</string>
+    <string name="todo_add">todo_add</string>
+    <string name="priority_status">priority_status</string>
+    <string name="done_count">Выполнено: %d</string>
+    <string name="delete_todo">delete_todo</string>
+    <string name="show_done">show_done</string>
+</resources>
