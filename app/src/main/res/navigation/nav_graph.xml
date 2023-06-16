@@ -17,7 +17,14 @@
     <fragment
         android:id="@+id/addTodoFragment"
         android:name="com.example.todoappyandex.presentation.ui.AddTodoFragment"
-        android:label="fragment_add_todo"
-        tools:layout="@layout/fragment_add_todo" />
+        android:label="Дело"
+        tools:layout="@layout/fragment_add_todo" >
+        <argument
+            android:name="todoItem"
+            android:defaultValue="@null"
+            app:argType="com.example.todoappyandex.domain.model.TodoItem"
+            app:nullable="true" />
+    </fragment>
 
 </navigation>
+

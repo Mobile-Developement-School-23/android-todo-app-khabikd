@@ -12,7 +12,11 @@ import com.example.todoappyandex.R
 import com.example.todoappyandex.databinding.TodoItemBinding
 import com.example.todoappyandex.domain.model.TodoItem
 
-class TodoListAdapter(): ListAdapter<TodoItem, TodoListAdapter.TodoItemViewHolder>(TodoItemDiffCallback()) {
+class TodoListAdapter(private val listener: OnItemClickListener): ListAdapter<TodoItem, TodoListAdapter.TodoItemViewHolder>(TodoItemDiffCallback()) {
+
+    interface OnItemClickListener {
+        fun onItemClick(todoItem: TodoItem)
+    }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TodoItemViewHolder {
         val binding = TodoItemBinding.inflate(LayoutInflater.from(parent.context), parent, false)
@@ -25,6 +29,16 @@ class TodoListAdapter(): ListAdapter<TodoItem, TodoListAdapter.TodoItemViewHolde
     }
 
     inner class TodoItemViewHolder(private val binding: TodoItemBinding) : RecyclerView.ViewHolder(binding.root) {
+
+        init {
+            itemView.setOnClickListener {
+                val position = adapterPosition
+                if (position != RecyclerView.NO_POSITION) {
+                    val todoItem = getItem(position)
+                    listener.onItemClick(todoItem)
+                }
+            }
+        }
 
         fun bind(todoItem: TodoItem) {
             binding.apply {

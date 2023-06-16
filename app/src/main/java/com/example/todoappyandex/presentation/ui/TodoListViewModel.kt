@@ -32,9 +32,17 @@ class TodoListViewModel(private val repository: TodoItemsRepository): ViewModel(
 
     fun addTodo(todo: TodoItem) {
         repository.addTodoItem(todo)
-        fetchTodoList()
+    }
+
+    fun deleteTodoItem(todoItem: TodoItem) {
+        repository.deleteTodoItem(todoItem)
+    }
+
+    fun updateTodoItem(todo: TodoItem) {
+        repository.updateTodoItem(todo)
     }
 }
+
 
 class TodoListViewModelFactory(private val repository: TodoItemsRepository) : ViewModelProvider.Factory {
     override fun <T : ViewModel> create(modelClass: Class<T>): T {

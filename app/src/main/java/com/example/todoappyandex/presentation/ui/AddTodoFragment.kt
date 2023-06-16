@@ -8,6 +8,7 @@ import android.view.ViewGroup
 import androidx.appcompat.widget.PopupMenu
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
+import androidx.navigation.fragment.navArgs
 import com.example.todoappyandex.R
 import com.example.todoappyandex.databinding.FragmentAddTodoBinding
 import com.example.todoappyandex.domain.model.TodoItem
@@ -32,6 +33,13 @@ class AddTodoFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        val args: AddTodoFragmentArgs by navArgs()
+        val todoItem: TodoItem? = args.todoItem
+
+        if (todoItem != null) {
+            binding.todoDescription.setText(todoItem.text)
+        }
+
         val priorityMenu = PopupMenu(requireContext(), binding.priorityLayout)
         priorityMenu.menuInflater.inflate(R.menu.menu_priority, priorityMenu.menu)
 
@@ -60,25 +68,41 @@ class AddTodoFragment : Fragment() {
             }
         }
         binding.save.setOnClickListener {
-            val todoText = binding.todoDescription.text.toString().trim()
+            if (binding.todoDescription.text.toString().trim() != "") {
+                val todoText = binding.todoDescription.text.toString().trim()
 
-            val todoPosition = todoListViewModel.todoList.value.size // Получаем текущий размер списка (следующая позиция)
+                if (todoItem != null) {
+                    // Редактирование существующей тудушки
+                    val updatedTodo = todoItem.copy(
+                        text = todoText,
+                        priority = priority
+                    )
+                    todoListViewModel.updateTodoItem(updatedTodo)
+                } else {
+                    // Создание новой тудушки
+                    val todoPosition = todoListViewModel.todoList.value.size
+                    val todo = TodoItem(
+                        id = todoPosition.toString(),
+                        text = todoText,
+                        priority = priority,
+                        deadline = null,
+                        isDone = false,
+                        createdDate = Date(),
+                        changedDate = null
+                    )
+                    todoListViewModel.addTodo(todo)
+                }
 
-            val todo = TodoItem(
-                id = todoPosition.toString(), // Используем позицию как идентификатор
-                text = todoText,
-                priority = priority,
-                deadline = null,
-                isDone = false,
-                createdDate = Date(),
-                changedDate = null
-            )
+                findNavController().navigateUp()
+            }
+        }
 
-            // Добавляем новую тудушку в список
-            todoListViewModel.addTodo(todo)
-
-            // Переход на главный экран
-            findNavController().navigateUp()
+        binding.deleteLayout.setOnClickListener {
+            if (todoItem != null) {
+                // Удаление тудушки из списка
+                todoListViewModel.deleteTodoItem(todoItem)
+                findNavController().navigateUp()
+            }
         }
     }
 
@@ -88,3 +112,4 @@ class AddTodoFragment : Fragment() {
     }
 
 }
+

@@ -14,11 +14,12 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.todoappyandex.R
 import com.example.todoappyandex.data.repository.TodoItemsRepository
 import com.example.todoappyandex.databinding.FragmentTodoListBinding
+import com.example.todoappyandex.domain.model.TodoItem
 import com.example.todoappyandex.presentation.adapter.TodoListAdapter
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import kotlinx.coroutines.launch
 
-class TodoListFragment : Fragment() {
+class TodoListFragment : Fragment(), TodoListAdapter.OnItemClickListener {
 
     private var _binding: FragmentTodoListBinding? = null
     private val binding get() = _binding!!
@@ -44,7 +45,7 @@ class TodoListFragment : Fragment() {
         recyclerView = binding.recyclerView
         addBtn = binding.addBtn
         completedTodoCountTextView = binding.todoDoneCount
-        adapter = TodoListAdapter()
+        adapter = TodoListAdapter(this)
         recyclerView.adapter = adapter
         recyclerView.layoutManager = LinearLayoutManager(context)
 
@@ -63,6 +64,11 @@ class TodoListFragment : Fragment() {
         addBtn.setOnClickListener {
             findNavController().navigate(R.id.addTodoFragment)
         }
+    }
+
+    override fun onItemClick(todoItem: TodoItem) {
+        val action = TodoListFragmentDirections.actionTodoListFragmentToAddTodoFragment(todoItem)
+        findNavController().navigate(action)
     }
 
     override fun onDestroyView() {

@@ -30,5 +30,20 @@ class TodoItemsRepository {
         updatedList.add(todo)
         _todoList.value = updatedList
     }
+
+    fun deleteTodoItem(todoItem: TodoItem) {
+        val updatedList = _todoList.value.toMutableList()
+        updatedList.remove(todoItem)
+        _todoList.value = updatedList
+    }
+
+    fun updateTodoItem(todo: TodoItem) {
+        val updatedList = _todoList.value.toMutableList()
+        val index = updatedList.indexOfFirst { it.id == todo.id }
+        if (index != -1) {
+            updatedList[index] = todo
+            _todoList.value = updatedList
+        }
+    }
 }
 
