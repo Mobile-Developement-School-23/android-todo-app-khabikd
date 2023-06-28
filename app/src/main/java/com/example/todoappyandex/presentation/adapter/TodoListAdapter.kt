@@ -43,14 +43,14 @@ class TodoListAdapter(private val listener: OnItemClickListener): ListAdapter<To
         fun bind(todoItem: TodoItem) {
             binding.apply {
                 // Установка состояния чекбокса и текста дела
-                checkbox.isChecked = todoItem.isDone
+                checkbox.isChecked = todoItem.done
                 todoTxt.text = todoItem.text
-                when (todoItem.priority) {
-                    TodoItem.Priority.HIGH -> { priorityImage.setImageResource(R.drawable.priority_high); priorityImage.visibility = View.VISIBLE }
-                    TodoItem.Priority.LOW -> { priorityImage.setImageResource(R.drawable.priority_low); priorityImage.visibility = View.VISIBLE }
+                when (todoItem.importance) {
+                    TodoItem.Importance.HIGH -> { priorityImage.setImageResource(R.drawable.priority_high); priorityImage.visibility = View.VISIBLE }
+                    TodoItem.Importance.LOW -> { priorityImage.setImageResource(R.drawable.priority_low); priorityImage.visibility = View.VISIBLE }
                     else -> { priorityImage.visibility = View.GONE }
                 }
-                if (todoItem.isDone) {
+                if (todoItem.done) {
                     todoTxt.paintFlags = todoTxt.paintFlags or Paint.STRIKE_THRU_TEXT_FLAG
                     todoTxt.setTextColor(ContextCompat.getColor(binding.root.context, R.color.gray))
                 } else {
@@ -60,7 +60,7 @@ class TodoListAdapter(private val listener: OnItemClickListener): ListAdapter<To
 
                 // Обработка нажатия на чекбокс
                 binding.checkbox.setOnCheckedChangeListener { _, isChecked ->
-                    todoItem.isDone = isChecked
+                    todoItem.done = isChecked
                     if (isChecked) {
                         todoTxt.paintFlags = todoTxt.paintFlags or Paint.STRIKE_THRU_TEXT_FLAG
                         todoTxt.setTextColor(ContextCompat.getColor(binding.root.context, R.color.gray))
@@ -68,9 +68,9 @@ class TodoListAdapter(private val listener: OnItemClickListener): ListAdapter<To
                     } else {
                         todoTxt.paintFlags = todoTxt.paintFlags and Paint.STRIKE_THRU_TEXT_FLAG.inv()
                         todoTxt.setTextColor(ContextCompat.getColor(binding.root.context, R.color.black))
-                        when (todoItem.priority) {
-                            TodoItem.Priority.HIGH -> { priorityImage.setImageResource(R.drawable.priority_high); priorityImage.visibility = View.VISIBLE }
-                            TodoItem.Priority.LOW -> { priorityImage.setImageResource(R.drawable.priority_low); priorityImage.visibility = View.VISIBLE }
+                        when (todoItem.importance) {
+                            TodoItem.Importance.HIGH -> { priorityImage.setImageResource(R.drawable.priority_high); priorityImage.visibility = View.VISIBLE }
+                            TodoItem.Importance.LOW -> { priorityImage.setImageResource(R.drawable.priority_low); priorityImage.visibility = View.VISIBLE }
                             else -> { priorityImage.visibility = View.GONE }
                         }
                     }

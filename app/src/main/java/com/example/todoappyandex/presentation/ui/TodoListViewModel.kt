@@ -1,45 +1,59 @@
 package com.example.todoappyandex.presentation.ui
 
 import androidx.lifecycle.*
-import com.example.todoappyandex.data.repository.TodoItemsRepository
+import com.example.todoappyandex.data.TodoItemsRepository
 import com.example.todoappyandex.domain.model.TodoItem
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
 class TodoListViewModel(private val repository: TodoItemsRepository): ViewModel() {
 
-    private val _todoList = MutableStateFlow<List<TodoItem>>(emptyList())
-    val todoList: StateFlow<List<TodoItem>> = _todoList
+//    private val _todoList = MutableStateFlow<List<TodoItem>>(emptyList())
+//    val todoList: StateFlow<List<TodoItem>> = _todoList
+//
+//    private val _completedTodoCount = MutableStateFlow<Int>(0)
+//    val completedTodoCount: StateFlow<Int> = _completedTodoCount
+//
+//    init {
+//        fetchTodoList()
+//    }
+//
+//    private fun fetchTodoList() {
+////        _todoList.value = repository.getTodoList()
+////        viewModelScope.launch {
+////            repository.todoList.collect { items ->
+////                _todoList.value = items.toMutableList()
+////                val completedCount = items.count { it.done }
+////                _completedTodoCount.value = completedCount
+////            }
+////        }
+//        _todoList.value = repository.getTodoList()
+//        viewModelScope.launch {
+//            repository.todoItemsFlow.collect { items ->
+//                _todoList.value = items.toMutableList()
+//            }
+//        }
+//    }
 
-    private val _completedTodoCount = MutableStateFlow<Int>(0)
-    val completedTodoCount: StateFlow<Int> = _completedTodoCount
+    val todoList = repository.getTodoList()
+    fun getTodoItem(itemId: String) = repository.getTodoItem(itemId)
 
-    init {
-        fetchTodoList()
-    }
-
-    private fun fetchTodoList() {
-        _todoList.value = repository.getTodoList()
-        viewModelScope.launch {
-            repository.todoList.collect { items ->
-                _todoList.value = items.toMutableList()
-                val completedCount = items.count { it.isDone }
-                _completedTodoCount.value = completedCount
-            }
+    fun addTodoItem(todoItem: TodoItem) {
+        viewModelScope.launch(Dispatchers.IO) {
+            repository.addTodoItem(todoItem)
         }
     }
 
-    fun addTodo(todo: TodoItem) {
-        repository.addTodoItem(todo)
+    fun updateTodoItem(todoItem: TodoItem) {
+        viewModelScope.launch(Dispatchers.IO) {
+            repository.updateTodoItem(todoItem)
+        }
     }
 
     fun deleteTodoItem(todoItem: TodoItem) {
-        repository.deleteTodoItem(todoItem)
-    }
-
-    fun updateTodoItem(todo: TodoItem) {
-        repository.updateTodoItem(todo)
+        viewModelScope.launch(Dispatchers.IO) {
+            repository.deleteTodoItem(todoItem)
+        }
     }
 }
 

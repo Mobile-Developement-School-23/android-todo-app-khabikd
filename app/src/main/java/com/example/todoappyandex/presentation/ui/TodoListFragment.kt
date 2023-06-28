@@ -12,7 +12,8 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.todoappyandex.R
-import com.example.todoappyandex.data.repository.TodoItemsRepository
+import com.example.todoappyandex.TodoApplication
+import com.example.todoappyandex.data.TodoItemsRepository
 import com.example.todoappyandex.databinding.FragmentTodoListBinding
 import com.example.todoappyandex.domain.model.TodoItem
 import com.example.todoappyandex.presentation.adapter.TodoListAdapter
@@ -28,10 +29,17 @@ class TodoListFragment : Fragment(), TodoListAdapter.OnItemClickListener {
     private lateinit var addBtn: FloatingActionButton
     private lateinit var completedTodoCountTextView: TextView
     private lateinit var adapter: TodoListAdapter
+    private lateinit var todoRepository: TodoItemsRepository
+
     private val todoListViewModel: TodoListViewModel by activityViewModels {
-        TodoListViewModelFactory((TodoItemsRepository()))
+        TodoListViewModelFactory(todoRepository)
     }
 
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        val todoApplication = requireActivity().application as TodoApplication
+        todoRepository = todoApplication.todoRepository
+    }
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -55,11 +63,11 @@ class TodoListFragment : Fragment(), TodoListAdapter.OnItemClickListener {
             }
         }
 
-        viewLifecycleOwner.lifecycleScope.launch {
-            todoListViewModel.completedTodoCount.collect() {count ->
-                completedTodoCountTextView.text = getString(R.string.done_count, count)
-            }
-        }
+//        viewLifecycleOwner.lifecycleScope.launch {
+//            todoListViewModel.completedTodoCount.collect() {count ->
+//                completedTodoCountTextView.text = getString(R.string.done_count, count)
+//            }
+//        }
 
         addBtn.setOnClickListener {
             findNavController().navigate(R.id.addTodoFragment)

@@ -19,7 +19,7 @@ class AddTodoFragment : Fragment() {
     private var _binding: FragmentAddTodoBinding? = null
     private val binding get() = _binding!!
 
-    private var priority: TodoItem.Priority = TodoItem.Priority.DEFAULT
+    private var importance: TodoItem.Importance = TodoItem.Importance.DEFAULT
 
     private val todoListViewModel: TodoListViewModel by activityViewModels()
 
@@ -50,17 +50,17 @@ class AddTodoFragment : Fragment() {
         priorityMenu.setOnMenuItemClickListener { menuItem ->
             when (menuItem.itemId) {
                 R.id.action_priority_default -> {
-                    priority = TodoItem.Priority.DEFAULT
+                    importance = TodoItem.Importance.DEFAULT
                     binding.priorityText.text = menuItem.title.toString()
                     true
                 }
                 R.id.action_priority_low -> {
-                    priority = TodoItem.Priority.LOW
+                    importance = TodoItem.Importance.LOW
                     binding.priorityText.text = menuItem.title.toString()
                     true
                 }
                 R.id.action_priority_high -> {
-                    priority = TodoItem.Priority.HIGH
+                    importance = TodoItem.Importance.HIGH
                     binding.priorityText.text = menuItem.title.toString()
                     true
                 }
@@ -75,22 +75,21 @@ class AddTodoFragment : Fragment() {
                     // Редактирование существующей тудушки
                     val updatedTodo = todoItem.copy(
                         text = todoText,
-                        priority = priority
+                        importance = importance
                     )
                     todoListViewModel.updateTodoItem(updatedTodo)
                 } else {
                     // Создание новой тудушки
-                    val todoPosition = todoListViewModel.todoList.value.size
-                    val todo = TodoItem(
-                        id = todoPosition.toString(),
-                        text = todoText,
-                        priority = priority,
-                        deadline = null,
-                        isDone = false,
-                        createdDate = Date(),
-                        changedDate = null
-                    )
-                    todoListViewModel.addTodo(todo)
+                        val todo = TodoItem(
+                            id = UUID.randomUUID().toString(),
+                            text = todoText,
+                            importance = importance,
+                            deadline = null,
+                            done = false,
+                            changed_at = null,
+                            last_updated_by = "12"
+                        )
+                    todoListViewModel.addTodoItem(todo)
                 }
 
                 findNavController().navigateUp()
