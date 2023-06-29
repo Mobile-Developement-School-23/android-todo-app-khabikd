@@ -21,9 +21,7 @@ class TodoItemsRepository(
 
     suspend fun syncTodoList() {
         withContext(Dispatchers.IO) {
-            val localList = todoDao.getTodoList()
-
-            val response = todoApi.updateTaskList(revision, TodoListRequest(revision, localList))
+            val response = todoApi.getTaskList()
 
             if (response.status == "ok") {
                 todoDao.updateTodoList(response.list)

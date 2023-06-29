@@ -16,22 +16,22 @@ private const val BASEURL =
     "https://beta.mrdekk.ru/todobackend/"
 
 interface TodoItemApi {
-    @GET("/list")
+    @GET("list")
     suspend fun getTaskList(): TodoListResponse
 
-    @PATCH("/list")
+    @PATCH("list")
     suspend fun updateTaskList(@Header("X-Last-Known-Revision") revision: Int, @Body request: TodoListRequest): TodoListResponse
 
-    @GET("/list/{id}")
+    @GET("list/{id}")
     suspend fun getTaskById(@Path("id") id: String): TodoResponse
 
-    @POST("/list")
+    @POST("list")
     suspend fun addTask(@Header("X-Last-Known-Revision") revision: Int, @Body request: TodoRequest): TodoResponse
 
-    @PUT("/list/{id}")
+    @PUT("list/{id}")
     suspend fun updateTask(@Path("id") id: String, @Header("X-Last-Known-Revision") revision: Int, @Body request: TodoRequest): TodoResponse
 
-    @DELETE("/list/{id}")
+    @DELETE("list/{id}")
     suspend fun deleteTask(@Path("id") id: String, @Header("X-Last-Known-Revision") revision: Int): TodoResponse
 }
 
