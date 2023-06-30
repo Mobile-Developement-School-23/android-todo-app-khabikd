@@ -11,3 +11,13 @@ class AuthInterceptor(private val authToken: String) : Interceptor {
         return chain.proceed(request)
     }
 }
+
+class LastKnownRevisionInterceptor(private val revision: Int) : Interceptor {
+    override fun intercept(chain: Interceptor.Chain): Response {
+        val originalRequest = chain.request()
+        val modifiedRequest = originalRequest.newBuilder()
+            .header("X-Last-Known-Revision", revision.toString())
+            .build()
+        return chain.proceed(modifiedRequest)
+    }
+}

@@ -7,7 +7,6 @@ import retrofit2.http.Body
 import retrofit2.http.DELETE
 import retrofit2.http.GET
 import retrofit2.http.Header
-import retrofit2.http.PATCH
 import retrofit2.http.POST
 import retrofit2.http.PUT
 import retrofit2.http.Path
@@ -15,27 +14,38 @@ import retrofit2.http.Path
 private const val BASEURL =
     "https://beta.mrdekk.ru/todobackend/"
 
-interface TodoItemApi {
-    @GET("list")
-    suspend fun getTaskList(): TodoListResponse
+interface TodoService {
 
-    @PATCH("list")
-    suspend fun updateTaskList(@Header("X-Last-Known-Revision") revision: Int, @Body request: TodoListRequest): TodoListResponse
+    @GET("list")
+    suspend fun getTodoList(): TodoListResponse
 
     @GET("list/{id}")
-    suspend fun getTaskById(@Path("id") id: String): TodoResponse
+    suspend fun getTodoItem(
+        @Path("id") todoId: String
+    ): TodoResponse
 
     @POST("list")
-    suspend fun addTask(@Header("X-Last-Known-Revision") revision: Int, @Body request: TodoRequest): TodoResponse
+    suspend fun saveTodoItem(
+        @Body todoBody: TodoBody,
+        @Header("X-Last-Known-Revision") revision: Int
+    ): TodoResponse
 
     @PUT("list/{id}")
-    suspend fun updateTask(@Path("id") id: String, @Header("X-Last-Known-Revision") revision: Int, @Body request: TodoRequest): TodoResponse
+    suspend fun editTodoItem(
+        @Path("id") todoId: String,
+        @Body todoBody: TodoBody,
+        @Header("X-Last-Known-Revision") revision: Int
+    ): TodoResponse
 
     @DELETE("list/{id}")
-    suspend fun deleteTask(@Path("id") id: String, @Header("X-Last-Known-Revision") revision: Int): TodoResponse
+    suspend fun deleteTodoItem(
+        @Path("id") todoId: String,
+        @Header("X-Last-Known-Revision") revision: Int
+    ): TodoResponse
+
 }
 
-fun createTodoItemApi(): TodoItemApi {
+fun createTodoItemApi(): TodoService {
     val authToken = "pippiest"
     val okHttpClient = OkHttpClient.Builder()
         .addInterceptor(AuthInterceptor(authToken))
@@ -45,5 +55,5 @@ fun createTodoItemApi(): TodoItemApi {
         .client(okHttpClient)
         .addConverterFactory(GsonConverterFactory.create())
         .build()
-    return retrofit.create(TodoItemApi::class.java)
+    return retrofit.create(TodoService::class.java)
 }

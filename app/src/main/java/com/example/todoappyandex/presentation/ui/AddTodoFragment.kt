@@ -77,7 +77,7 @@ class AddTodoFragment : Fragment() {
                         text = todoText,
                         importance = importance
                     )
-                    todoListViewModel.updateTodoItem(updatedTodo)
+                    todoListViewModel.editTodoItem(updatedTodo)
                 } else {
                     // Создание новой тудушки
                         val todo = TodoItem(
@@ -89,7 +89,7 @@ class AddTodoFragment : Fragment() {
                             changed_at = null,
                             last_updated_by = "12"
                         )
-                    todoListViewModel.addTodoItem(todo)
+                    todoListViewModel.saveTodoItem(todo)
                 }
 
                 findNavController().navigateUp()

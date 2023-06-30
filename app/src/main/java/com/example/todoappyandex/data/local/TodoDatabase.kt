@@ -9,7 +9,7 @@ import com.example.todoappyandex.domain.model.TodoItem
 @Database(entities = [TodoItem::class], version = 1)
 abstract class TodoDatabase: RoomDatabase() {
 
-    abstract fun todoItemsDao(): TodoItemsDao
+    abstract fun todoItemDao(): TodoItemDao
 
     companion object {
         @Volatile

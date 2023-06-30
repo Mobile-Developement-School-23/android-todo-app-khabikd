@@ -1,35 +1,52 @@
 package com.example.todoappyandex.data.remote
 
-import androidx.room.PrimaryKey
 import com.example.todoappyandex.domain.model.TodoItem
-import com.google.gson.annotations.SerializedName
-import java.util.UUID
+import kotlinx.serialization.SerialName
+import kotlinx.serialization.Serializable
 
+@Serializable
+data class TodoItemApi(
+    @SerialName("id") var id: String,
+    @SerialName("text") var text: String,
+    @SerialName("importance") var importance: String,
+    @SerialName("deadline") var deadline: Long? = null,
+    @SerialName("done") var done: Boolean,
+    @SerialName("color") var color: String? = null,
+    @SerialName("created_at") var createdAt: Long,
+    @SerialName("changed_at") var changedAt: Long? = null,
+    @SerialName("last_updated_by") var lastUpdateBy: String
+) {
+    fun toTodoItem(): TodoItem {
+        return TodoItem(
+            id = id,
+            text = text,
+            importance = TodoItem.Importance.valueOf(importance),
+            deadline = deadline,
+            done = done,
+            color = color,
+            created_at = createdAt,
+            changed_at = changedAt,
+            last_updated_by = lastUpdateBy
+        )
+    }
 
+}
+
+@Serializable
 data class TodoListResponse(
-    val status: String,
-    val list: List<TodoItem>,
-    val revision: Int
+    @SerialName("status") val status: String,
+    @SerialName("list") val list: List<TodoItemApi>,
+    @SerialName("revision") val revision: Int
 )
 
-data class TodoListRequest(
-    val list: List<TodoItem>
-)
-
+@Serializable
 data class TodoResponse(
-    val status: String,
-    val element: TodoItem,
-    val revision: Int
+    @SerialName("status") val status: String,
+    @SerialName("element") val todoItem: TodoItemApi,
+    @SerialName("revision") var revision: Int = -1
 )
 
-data class TodoRequest(
-    @SerializedName("id") val id: String = UUID.randomUUID().toString(),
-    @SerializedName("text") val text: String,
-    @SerializedName("importance")val importance: TodoItem.Importance,
-    @SerializedName("deadline") val deadline: Long? = null,
-    @SerializedName("done") var done: Boolean,
-    @SerializedName("color") val color: String? = "#FFFFFF",
-    @SerializedName("created_at") val created_at: Long = System.currentTimeMillis(),
-    @SerializedName("changed_at") val changed_at: Long? = null,
-    @SerializedName("last_updated_by") val last_updated_by: String
+@Serializable
+data class TodoBody(
+    @SerialName("element") val todoItem: TodoItemApi
 )

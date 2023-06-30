@@ -58,7 +58,7 @@ class TodoListFragment : Fragment(), TodoListAdapter.OnItemClickListener {
         recyclerView.layoutManager = LinearLayoutManager(context)
 
         viewLifecycleOwner.lifecycleScope.launch {
-            todoListViewModel.todoList.collect() { todoItems ->
+            todoListViewModel.todoListState.collect() { todoItems ->
                 todoItems.let { adapter.submitList(it) }
             }
         }
