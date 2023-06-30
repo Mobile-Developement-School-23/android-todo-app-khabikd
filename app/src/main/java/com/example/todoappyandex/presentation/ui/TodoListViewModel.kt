@@ -10,6 +10,7 @@ import kotlinx.coroutines.launch
 
 class TodoListViewModel(private val repository: TodoItemsRepository): ViewModel() {
 
+
     private val _todoListState = MutableStateFlow<List<TodoItem>>(emptyList())
     val todoListState: StateFlow<List<TodoItem>> = _todoListState
 
@@ -30,23 +31,27 @@ class TodoListViewModel(private val repository: TodoItemsRepository): ViewModel(
                 val todoList = repository.getTodoList()
                 _todoListState.value = todoList
             } catch (e: Exception) {
-                _errorState.value = "Failed to fetch todo list: ${e.message}"
+                _errorState.value = "${e.message}"
             } finally {
                 _loadingState.value = false
             }
         }
     }
 
-    fun refreshTodoList() {
-        fetchTodoList()
+    fun retryFetchTodoList() {
+        if (_errorState.value != null) {
+            _errorState.value = null
+            fetchTodoList()
+        }
     }
 
     fun saveTodoItem(todoItem: TodoItem) {
         viewModelScope.launch {
             try {
                 repository.saveTodoItem(todoItem)
+                fetchTodoList() // Обновление списка после успешного сохранения
             } catch (e: Exception) {
-                _errorState.value = "Failed to save todo item: ${e.message}"
+                _errorState.value = "${e.message}"
             }
         }
     }
@@ -55,8 +60,9 @@ class TodoListViewModel(private val repository: TodoItemsRepository): ViewModel(
         viewModelScope.launch {
             try {
                 repository.editTodoItem(todoItem)
+                fetchTodoList() // Обновление списка после успешного редактирования
             } catch (e: Exception) {
-                _errorState.value = "Failed to edit todo item: ${e.message}"
+                _errorState.value = "${e.message}"
             }
         }
     }
@@ -65,8 +71,9 @@ class TodoListViewModel(private val repository: TodoItemsRepository): ViewModel(
         viewModelScope.launch {
             try {
                 repository.deleteTodoItem(todoItem)
+                fetchTodoList() // Обновление списка после успешного удаления
             } catch (e: Exception) {
-                _errorState.value = "Failed to delete todo item: ${e.message}"
+                _errorState.value = "${e.message}"
             }
         }
     }

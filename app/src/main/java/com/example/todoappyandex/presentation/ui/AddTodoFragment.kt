@@ -12,6 +12,7 @@ import androidx.navigation.fragment.navArgs
 import com.example.todoappyandex.R
 import com.example.todoappyandex.databinding.FragmentAddTodoBinding
 import com.example.todoappyandex.domain.model.TodoItem
+import com.google.android.material.snackbar.Snackbar
 import java.util.*
 
 class AddTodoFragment : Fragment() {
@@ -80,19 +81,21 @@ class AddTodoFragment : Fragment() {
                     todoListViewModel.editTodoItem(updatedTodo)
                 } else {
                     // Создание новой тудушки
-                        val todo = TodoItem(
-                            id = UUID.randomUUID().toString(),
-                            text = todoText,
-                            importance = importance,
-                            deadline = null,
-                            done = false,
-                            changed_at = null,
-                            last_updated_by = "12"
-                        )
+                    val todo = TodoItem(
+                        id = UUID.randomUUID().toString(),
+                        text = todoText,
+                        importance = importance,
+                        deadline = null,
+                        done = false,
+                        changed_at = null,
+                        last_updated_by = "12"
+                    )
                     todoListViewModel.saveTodoItem(todo)
                 }
 
                 findNavController().navigateUp()
+            } else {
+                Snackbar.make(view, "Task description cannot be empty", Snackbar.LENGTH_SHORT).show()
             }
         }
 
@@ -109,6 +112,5 @@ class AddTodoFragment : Fragment() {
         super.onDestroyView()
         _binding = null
     }
-
 }
 

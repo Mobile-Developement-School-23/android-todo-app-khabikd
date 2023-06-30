@@ -18,6 +18,7 @@ import com.example.todoappyandex.databinding.FragmentTodoListBinding
 import com.example.todoappyandex.domain.model.TodoItem
 import com.example.todoappyandex.presentation.adapter.TodoListAdapter
 import com.google.android.material.floatingactionbutton.FloatingActionButton
+import com.google.android.material.snackbar.Snackbar
 import kotlinx.coroutines.launch
 
 class TodoListFragment : Fragment(), TodoListAdapter.OnItemClickListener {
@@ -58,16 +59,22 @@ class TodoListFragment : Fragment(), TodoListAdapter.OnItemClickListener {
         recyclerView.layoutManager = LinearLayoutManager(context)
 
         viewLifecycleOwner.lifecycleScope.launch {
-            todoListViewModel.todoListState.collect() { todoItems ->
-                todoItems.let { adapter.submitList(it) }
+            todoListViewModel.todoListState.collect { todoItems ->
+                adapter.submitList(todoItems)
             }
         }
 
-//        viewLifecycleOwner.lifecycleScope.launch {
-//            todoListViewModel.completedTodoCount.collect() {count ->
-//                completedTodoCountTextView.text = getString(R.string.done_count, count)
-//            }
-//        }
+        viewLifecycleOwner.lifecycleScope.launch {
+            todoListViewModel.errorState.collect { error ->
+                if (error != null) {
+                    Snackbar.make(view, error, Snackbar.LENGTH_LONG)
+                        .setAction("Retry") {
+                            todoListViewModel.retryFetchTodoList()
+                        }
+                        .show()
+                }
+            }
+        }
 
         addBtn.setOnClickListener {
             findNavController().navigate(R.id.addTodoFragment)

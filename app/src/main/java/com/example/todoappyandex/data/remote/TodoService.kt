@@ -1,6 +1,7 @@
 package com.example.todoappyandex.data.remote
 
 import okhttp3.OkHttpClient
+import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.http.Body
@@ -45,10 +46,16 @@ interface TodoService {
 
 }
 
+private fun makeLoggingInterceptor(): HttpLoggingInterceptor {
+    val logging = HttpLoggingInterceptor()
+    logging.level = HttpLoggingInterceptor.Level.BODY
+    return logging
+}
 fun createTodoItemApi(): TodoService {
     val authToken = "pippiest"
     val okHttpClient = OkHttpClient.Builder()
         .addInterceptor(AuthInterceptor(authToken))
+        .addInterceptor(makeLoggingInterceptor())
         .build()
     val retrofit = Retrofit.Builder()
         .baseUrl(BASEURL)
@@ -57,3 +64,4 @@ fun createTodoItemApi(): TodoService {
         .build()
     return retrofit.create(TodoService::class.java)
 }
+
