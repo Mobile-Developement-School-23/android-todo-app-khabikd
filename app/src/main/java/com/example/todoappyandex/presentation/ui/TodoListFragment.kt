@@ -7,7 +7,9 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import androidx.fragment.app.activityViewModels
+import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -59,19 +61,23 @@ class TodoListFragment : Fragment(), TodoListAdapter.OnItemClickListener {
         recyclerView.layoutManager = LinearLayoutManager(context)
 
         viewLifecycleOwner.lifecycleScope.launch {
-            todoListViewModel.todoListState.collect { todoItems ->
-                adapter.submitList(todoItems)
+            repeatOnLifecycle(Lifecycle.State.STARTED) {
+                todoListViewModel.todoListState.collect { todoItems ->
+                    adapter.submitList(todoItems)
+                }
             }
         }
 
         viewLifecycleOwner.lifecycleScope.launch {
-            todoListViewModel.errorState.collect { error ->
-                if (error != null) {
-                    Snackbar.make(view, error, Snackbar.LENGTH_LONG)
-                        .setAction("Retry") {
-                            todoListViewModel.retryFetchTodoList()
-                        }
-                        .show()
+            repeatOnLifecycle(Lifecycle.State.STARTED) {
+                todoListViewModel.errorState.collect { error ->
+                    if (error != null) {
+                        Snackbar.make(view, error, Snackbar.LENGTH_LONG)
+                            .setAction("Retry") {
+                                todoListViewModel.retryFetchTodoList()
+                            }
+                            .show()
+                    }
                 }
             }
         }
