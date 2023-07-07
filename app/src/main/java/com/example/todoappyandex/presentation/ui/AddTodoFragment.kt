@@ -12,6 +12,7 @@ import androidx.navigation.fragment.navArgs
 import com.example.todoappyandex.R
 import com.example.todoappyandex.databinding.FragmentAddTodoBinding
 import com.example.todoappyandex.domain.model.TodoItem
+import com.google.android.material.snackbar.Snackbar
 import java.util.*
 
 class AddTodoFragment : Fragment() {
@@ -19,7 +20,7 @@ class AddTodoFragment : Fragment() {
     private var _binding: FragmentAddTodoBinding? = null
     private val binding get() = _binding!!
 
-    private var priority: TodoItem.Priority = TodoItem.Priority.DEFAULT
+    private var importance: TodoItem.Importance = TodoItem.Importance.DEFAULT
 
     private val todoListViewModel: TodoListViewModel by activityViewModels()
 
@@ -50,17 +51,17 @@ class AddTodoFragment : Fragment() {
         priorityMenu.setOnMenuItemClickListener { menuItem ->
             when (menuItem.itemId) {
                 R.id.action_priority_default -> {
-                    priority = TodoItem.Priority.DEFAULT
+                    importance = TodoItem.Importance.DEFAULT
                     binding.priorityText.text = menuItem.title.toString()
                     true
                 }
                 R.id.action_priority_low -> {
-                    priority = TodoItem.Priority.LOW
+                    importance = TodoItem.Importance.LOW
                     binding.priorityText.text = menuItem.title.toString()
                     true
                 }
                 R.id.action_priority_high -> {
-                    priority = TodoItem.Priority.HIGH
+                    importance = TodoItem.Importance.HIGH
                     binding.priorityText.text = menuItem.title.toString()
                     true
                 }
@@ -75,25 +76,26 @@ class AddTodoFragment : Fragment() {
                     // Редактирование существующей тудушки
                     val updatedTodo = todoItem.copy(
                         text = todoText,
-                        priority = priority
+                        importance = importance
                     )
-                    todoListViewModel.updateTodoItem(updatedTodo)
+                    todoListViewModel.editTodoItem(updatedTodo)
                 } else {
                     // Создание новой тудушки
-                    val todoPosition = todoListViewModel.todoList.value.size
                     val todo = TodoItem(
-                        id = todoPosition.toString(),
+                        id = UUID.randomUUID().toString(),
                         text = todoText,
-                        priority = priority,
+                        importance = importance,
                         deadline = null,
-                        isDone = false,
-                        createdDate = Date(),
-                        changedDate = null
+                        done = false,
+                        changed_at = null,
+                        last_updated_by = "12"
                     )
-                    todoListViewModel.addTodo(todo)
+                    todoListViewModel.saveTodoItem(todo)
                 }
 
                 findNavController().navigateUp()
+            } else {
+                Snackbar.make(view, "Task description cannot be empty", Snackbar.LENGTH_SHORT).show()
             }
         }
 
@@ -110,6 +112,5 @@ class AddTodoFragment : Fragment() {
         super.onDestroyView()
         _binding = null
     }
-
 }
 

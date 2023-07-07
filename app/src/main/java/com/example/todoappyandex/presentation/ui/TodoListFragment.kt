@@ -7,16 +7,20 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import androidx.fragment.app.activityViewModels
+import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.todoappyandex.R
-import com.example.todoappyandex.data.repository.TodoItemsRepository
+import com.example.todoappyandex.TodoApplication
+import com.example.todoappyandex.data.TodoItemsRepository
 import com.example.todoappyandex.databinding.FragmentTodoListBinding
 import com.example.todoappyandex.domain.model.TodoItem
 import com.example.todoappyandex.presentation.adapter.TodoListAdapter
 import com.google.android.material.floatingactionbutton.FloatingActionButton
+import com.google.android.material.snackbar.Snackbar
 import kotlinx.coroutines.launch
 
 class TodoListFragment : Fragment(), TodoListAdapter.OnItemClickListener {
@@ -28,10 +32,17 @@ class TodoListFragment : Fragment(), TodoListAdapter.OnItemClickListener {
     private lateinit var addBtn: FloatingActionButton
     private lateinit var completedTodoCountTextView: TextView
     private lateinit var adapter: TodoListAdapter
+    private lateinit var todoRepository: TodoItemsRepository
+
     private val todoListViewModel: TodoListViewModel by activityViewModels {
-        TodoListViewModelFactory((TodoItemsRepository()))
+        TodoListViewModelFactory(todoRepository)
     }
 
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        val todoApplication = requireActivity().application as TodoApplication
+        todoRepository = todoApplication.todoRepository
+    }
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -50,14 +61,24 @@ class TodoListFragment : Fragment(), TodoListAdapter.OnItemClickListener {
         recyclerView.layoutManager = LinearLayoutManager(context)
 
         viewLifecycleOwner.lifecycleScope.launch {
-            todoListViewModel.todoList.collect() { todoItems ->
-                todoItems.let { adapter.submitList(it) }
+            repeatOnLifecycle(Lifecycle.State.STARTED) {
+                todoListViewModel.todoListState.collect { todoItems ->
+                    adapter.submitList(todoItems)
+                }
             }
         }
 
         viewLifecycleOwner.lifecycleScope.launch {
-            todoListViewModel.completedTodoCount.collect() {count ->
-                completedTodoCountTextView.text = getString(R.string.done_count, count)
+            repeatOnLifecycle(Lifecycle.State.STARTED) {
+                todoListViewModel.errorState.collect { error ->
+                    if (error != null) {
+                        Snackbar.make(view, error, Snackbar.LENGTH_LONG)
+                            .setAction("Retry") {
+                                todoListViewModel.retryFetchTodoList()
+                            }
+                            .show()
+                    }
+                }
             }
         }
 
