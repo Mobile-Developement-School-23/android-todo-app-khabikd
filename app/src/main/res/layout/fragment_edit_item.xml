@@ -5,7 +5,7 @@
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
-    tools:context=".presentation.ui.AddTodoFragment">
+    tools:context=".ui.edititem.EditItemFragment">
 
     <androidx.cardview.widget.CardView
         android:layout_width="match_parent"
@@ -13,15 +13,15 @@
         android:layout_margin="16dp"
         app:cardElevation="16dp"
         app:cardCornerRadius="8dp">
-    <EditText
-        android:id="@+id/todo_description"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_margin="16dp"
-        android:inputType="textMultiLine"
-        android:background="@null"
-        android:hint="Что надо сделать..."
-        android:autofillHints="no" />
+        <EditText
+            android:id="@+id/todo_description"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="16dp"
+            android:inputType="textMultiLine"
+            android:background="@null"
+            android:hint="Что надо сделать..."
+            android:autofillHints="no" />
     </androidx.cardview.widget.CardView>
 
     <LinearLayout
@@ -49,7 +49,7 @@
         android:layout_height="2dp"
         android:layout_marginStart="16dp"
         android:layout_marginEnd="16dp"/>
-    
+
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

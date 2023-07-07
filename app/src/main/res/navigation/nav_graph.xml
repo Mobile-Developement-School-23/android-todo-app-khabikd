@@ -3,28 +3,27 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/nav_graph"
-    app:startDestination="@id/todoListFragment">
+    app:startDestination="@id/todoItemsFragment">
 
     <fragment
-        android:id="@+id/todoListFragment"
-        android:name="com.example.todoappyandex.presentation.ui.TodoListFragment"
+        android:id="@+id/todoItemsFragment"
+        android:name="com.example.todoappyandex.ui.todoitems.TodoItemsFragment"
         android:label="Мои дела"
-        tools:layout="@layout/fragment_todo_list" >
+        tools:layout="@layout/fragment_todo_items" >
         <action
-            android:id="@+id/action_todoListFragment_to_addTodoFragment"
-            app:destination="@id/addTodoFragment" />
+            android:id="@+id/action_todoItemsFragment_to_editItemFragment"
+            app:destination="@id/editItemFragment" />
     </fragment>
     <fragment
-        android:id="@+id/addTodoFragment"
-        android:name="com.example.todoappyandex.presentation.ui.AddTodoFragment"
+        android:id="@+id/editItemFragment"
+        android:name="com.example.todoappyandex.ui.edititem.EditItemFragment"
         android:label="Дело"
-        tools:layout="@layout/fragment_add_todo" >
+        tools:layout="@layout/fragment_edit_item" >
         <argument
             android:name="todoItem"
             android:defaultValue="@null"
-            app:argType="com.example.todoappyandex.domain.model.TodoItem"
+            app:argType="com.example.todoappyandex.data.model.TodoItem"
             app:nullable="true" />
     </fragment>
-
 </navigation>
 
