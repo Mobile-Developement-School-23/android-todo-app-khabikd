@@ -23,7 +23,7 @@ import kotlinx.coroutines.launch
 import java.util.Calendar
 
 class EditItemFragment : Fragment() {
-
+// where FragmentComponent?
     private val editItemViewModel: EditItemViewModel by viewModels { TodoViewModelFactory() }
 
     private var _binding: FragmentEditItemBinding? = null

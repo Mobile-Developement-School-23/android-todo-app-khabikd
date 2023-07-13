@@ -10,7 +10,7 @@ import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 import kotlin.properties.Delegates
 
-class WorkerProvider @Inject constructor(
+class WorkerProvider @Inject constructor( // no scope, name lies
     updateDataWorkerFactory: CreateWorkerFactory,
     private val context: Context
 ) {

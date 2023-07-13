@@ -5,13 +5,15 @@ import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
 import java.util.UUID
 import javax.inject.Inject
+import javax.inject.Singleton
 
 private enum class KEYS {
     DEVICE,
     REVISION
 }
 
-class DataStorage @Inject constructor (
+@Singleton
+class DataStorage @Inject constructor ( // scope
     private val sharedPref: SharedPreferences,
 ) {
     private val mutex = Mutex()

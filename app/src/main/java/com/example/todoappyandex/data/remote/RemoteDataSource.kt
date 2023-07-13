@@ -11,7 +11,7 @@ import com.example.todoappyandex.data.remote.entities.TodoItemsRequest
 import retrofit2.Response
 import javax.inject.Inject
 
-class RemoteDataSource @Inject constructor(private val apiService: TodoApiService, private val dataStorage: DataStorage) {
+class RemoteDataSource @Inject constructor(private val apiService: TodoApiService, private val dataStorage: DataStorage) {  // no scope
 
     suspend fun getTodoItems(): List<TodoItem> {
         val response = apiService.getTodoList()

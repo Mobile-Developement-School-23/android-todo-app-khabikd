@@ -9,10 +9,10 @@ import retrofit2.converter.gson.GsonConverterFactory
 import java.util.concurrent.TimeUnit
 
 class RetrofitRepository {
-    private val okHttpClient = OkHttpClient.Builder()
+    private val okHttpClient = OkHttpClient.Builder() // should be DI module
         .addInterceptor(AuthInterceptor("pippiest"))
         .addInterceptor(makeLoggingInterceptor())
-        .connectTimeout(1000L, TimeUnit.SECONDS)
+        .connectTimeout(1000L, TimeUnit.SECONDS) // 1000s = 16min
         .readTimeout(1000L, TimeUnit.SECONDS)
         .writeTimeout(1000L, TimeUnit.SECONDS)
         .build()

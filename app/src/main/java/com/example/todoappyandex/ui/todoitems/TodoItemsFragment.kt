@@ -20,7 +20,7 @@ import com.example.todoappyandex.ui.edititem.EditItemFragment
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 
-class TodoItemsFragment : Fragment(), TodoItemChangeCallbacks {
+class TodoItemsFragment : Fragment(), TodoItemChangeCallbacks { // interface on class
 
     private lateinit var todoAdapter: TodoItemsAdapter
 
@@ -52,7 +52,7 @@ class TodoItemsFragment : Fragment(), TodoItemChangeCallbacks {
 
     private fun setupViewModel() {
         lifecycleScope.launch {
-            repeatOnLifecycle(Lifecycle.State.STARTED) {
+            repeatOnLifecycle(Lifecycle.State.STARTED) { // wrong lifecycle
                 todoListViewModel.completedTasksCount.collectLatest {
                     binding.todoDoneCount.text = String.format(
                         getString(R.string.done_count),

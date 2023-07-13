@@ -34,7 +34,7 @@ class EditItemViewModel @Inject constructor(private val repository: TodoReposito
 
     fun updateDeadline(deadline: Long?) {
         val currentTodoItem = _todoItem.value
-        val updatedTodoItem = currentTodoItem.copy(deadline = deadline)
+        val updatedTodoItem = currentTodoItem.copy(deadline = deadline) // repeated code
         _todoItem.value = updatedTodoItem
     }
 

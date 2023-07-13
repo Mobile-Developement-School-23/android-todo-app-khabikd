@@ -23,18 +23,6 @@ class TodoApp: Application() {
         }
 
     @Inject
-    lateinit var context: Context
-    @Inject
-    lateinit var sharedPreferences: SharedPreferences
-    @Inject
-    lateinit var todoApi: TodoApiService
-    @Inject
-    lateinit var todoDatabase: AppDatabase
-    @Inject
-    lateinit var todoRepository: TodoRepository
-    @Inject
-    lateinit var syncDataWorkerFactory: CreateWorkerFactory
-    @Inject
     lateinit var syncDataWorkerProvider: WorkerProvider
 
     override fun onCreate() {

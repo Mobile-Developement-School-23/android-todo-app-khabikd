@@ -8,7 +8,7 @@ import com.example.todoappyandex.data.model.TodoItem
 import kotlinx.coroutines.flow.map
 import javax.inject.Inject
 
-class LocalDataSource @Inject constructor(private val todoItemDao: TodoItemDao) {
+class LocalDataSource @Inject constructor(private val todoItemDao: TodoItemDao) { // no scope
 
     fun getTodoItemsFlow() = todoItemDao.getTodoItemsFlow().map { it.toExternalModel() }
 

@@ -19,7 +19,7 @@ class TodoRepository @Inject constructor(
     val todoItems: Flow<List<TodoItem>>
         get() = _todoItems
 
-    suspend fun syncTodoItems() = withContext(Dispatchers.IO) {
+    suspend fun syncTodoItems() = withContext(Dispatchers.IO) { // repeating withContext..try..catch
         try {
             val remoteItems = remoteDataSource.getTodoItems()
             localDataSource.addTodoItems(remoteItems)

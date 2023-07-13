@@ -9,7 +9,7 @@ import com.example.todoappyandex.ui.edititem.EditItemViewModel
 import com.example.todoappyandex.ui.todoitems.TodoItemsViewModel
 import javax.inject.Inject
 
-@FragmentScope
+@FragmentScope // wtf?
 class TodoViewModelFactory @Inject constructor() : ViewModelProvider.Factory {
     @Suppress("UNCHECKED_CAST")
     override fun <T : ViewModel> create(
@@ -18,7 +18,7 @@ class TodoViewModelFactory @Inject constructor() : ViewModelProvider.Factory {
     ): T {
         val application = checkNotNull(extras[ViewModelProvider.AndroidViewModelFactory.APPLICATION_KEY])
         val repository = (application as TodoApp).todoRepository
-        if (modelClass.isAssignableFrom(TodoItemsViewModel::class.java)) {
+        if (modelClass.isAssignableFrom(TodoItemsViewModel::class.java)) { // where ViewModelKey?
             return TodoItemsViewModel(repository) as T
         } else if (modelClass.isAssignableFrom(EditItemViewModel::class.java)) {
             return EditItemViewModel(repository) as T

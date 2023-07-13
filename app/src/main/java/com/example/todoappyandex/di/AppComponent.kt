@@ -22,7 +22,7 @@ interface AppComponent {
     @Component.Builder
     interface Builder {
         @BindsInstance
-        fun context(context: Context): Builder
+        fun context(context: Context): Builder // app context without qualifier
 
         fun build(): AppComponent
     }

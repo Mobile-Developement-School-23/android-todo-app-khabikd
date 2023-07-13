@@ -31,11 +31,4 @@ class AppModule() {
         return context.getSharedPreferences("my_preferences", Context.MODE_PRIVATE)
     }
 
-
-    @Provides
-    @Singleton
-    fun provideDataStorage(pref: SharedPreferences): DataStorage {
-        return DataStorage(pref)
-    }
-
 }

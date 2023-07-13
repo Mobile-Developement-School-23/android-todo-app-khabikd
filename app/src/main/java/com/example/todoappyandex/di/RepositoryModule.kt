@@ -19,19 +19,19 @@ class RepositoryModule {
         localDataSource: LocalDataSource,
         remoteDataSource: RemoteDataSource
     ): TodoRepository {
-        return TodoRepository(localDataSource, remoteDataSource)
+        return TodoRepository(localDataSource, remoteDataSource) // inject
     }
 
     @Provides
     @Singleton
     fun provideLocalDataSource(todoItemDao: TodoItemDao): LocalDataSource {
-        return LocalDataSource(todoItemDao)
+        return LocalDataSource(todoItemDao) // inject
     }
 
     @Provides
     @Singleton
     fun provideRemoteDataSource(apiService: TodoApiService, dataStorage: DataStorage): RemoteDataSource {
-        return RemoteDataSource(apiService, dataStorage)
+        return RemoteDataSource(apiService, dataStorage) // inject
     }
 
 }

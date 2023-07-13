@@ -12,10 +12,10 @@ class NetworkModule {
     @Provides
     @Singleton
     fun provideRetrofitRepository(): RetrofitRepository {
-        return RetrofitRepository()
+        return RetrofitRepository() // inject constructor
     }
 
     @Singleton
     @Provides
-    fun provideTodoApiService(): TodoApiService = RetrofitRepository().api
+    fun provideTodoApiService(): TodoApiService = RetrofitRepository().api // @provides for  retrofit.create
 }

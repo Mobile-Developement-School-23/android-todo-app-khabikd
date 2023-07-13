@@ -39,7 +39,7 @@ class TodoItemsAdapter(
 
 class TodoItemViewHolder(
     private val binding: TodoItemBinding,
-    private val callbacks: TodoItemChangeCallbacks
+    private val callbacks: TodoItemChangeCallbacks // viewmodel
 ) : RecyclerView.ViewHolder(binding.root) {
 
     fun onBind(todoItem: TodoItem, position: Int){
