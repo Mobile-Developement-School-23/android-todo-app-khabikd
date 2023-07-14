@@ -11,10 +11,10 @@ import kotlinx.coroutines.flow.Flow
 @Dao
 interface TodoItemDao {
 
-    @Query("select * FROM todoItem ")
+    @Query("SELECT * FROM todoItem ")
     fun getTodoItemsFlow(): Flow<List<TodoItemEntity>>
 
-    @Query("select * FROM todoItem")
+    @Query("SELECT * FROM todoItem")
     suspend fun getTodoItems(): List<TodoItemEntity>
 
     @Query("SELECT * FROM todoItem where id = :todoId")

@@ -11,4 +11,8 @@
     <string name="delete_todo">delete_todo</string>
     <string name="show_done">show_done</string>
     <string name="new_task">new_task</string>
+    <string name="notification">Дедлайн</string>
+    <string name="deadline_notification_description">deadline</string>
+    <string name="notification_channel_name">main_channel</string>
+    <string name="notification_channel_description">deadline</string>
 </resources>

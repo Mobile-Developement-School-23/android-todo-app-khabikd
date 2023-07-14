@@ -79,7 +79,7 @@ class TodoItemsFragment : Fragment(), TodoItemChangeCallbacks {
 
     private fun setupCreateTaskButton() {
         binding.addBtn.setOnClickListener {
-            findNavController().navigate(R.id.editItemFragment)
+            findNavController().navigate(R.id.action_todoItemsFragment_to_editItemFragment)
         }
     }
 
