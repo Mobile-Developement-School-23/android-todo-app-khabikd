@@ -1,9 +1,13 @@
 package com.example.todoappyandex.ui.todoitems
 
+import android.content.Context
+import android.content.res.Configuration
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.compose.ui.graphics.Color
 import androidx.core.content.ContextCompat
+import androidx.core.view.isVisible
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
@@ -11,6 +15,7 @@ import com.example.todoappyandex.R
 import com.example.todoappyandex.data.model.Importance
 import com.example.todoappyandex.data.model.TodoItem
 import com.example.todoappyandex.databinding.TodoItemBinding
+import com.example.todoappyandex.util.timestampToFormattedDate
 
 interface TodoItemChangeCallbacks {
     fun onTodoItemClicked(todoItem: TodoItem)
@@ -18,7 +23,7 @@ interface TodoItemChangeCallbacks {
 }
 
 class TodoItemsAdapter(
-    private val callbacks: TodoItemChangeCallbacks
+    private val callbacks: TodoItemChangeCallbacks,
 ) : ListAdapter<TodoItem, TodoItemViewHolder>(TodoItemDiffCallback()) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TodoItemViewHolder {
@@ -39,7 +44,7 @@ class TodoItemsAdapter(
 
 class TodoItemViewHolder(
     private val binding: TodoItemBinding,
-    private val callbacks: TodoItemChangeCallbacks
+    private val callbacks: TodoItemChangeCallbacks,
 ) : RecyclerView.ViewHolder(binding.root) {
 
     fun onBind(todoItem: TodoItem, position: Int){
@@ -72,18 +77,28 @@ class TodoItemViewHolder(
     }
 
     private fun setTaskDescription(todoItem: TodoItem) {
+        if (todoItem.deadline != null) {
+            binding.deadline.text = todoItem.deadline.timestampToFormattedDate()
+        }
         binding.todoTxt.text = todoItem.text
         if (todoItem.isCompleted) {
             binding.todoTxt.paint.isStrikeThruText = true
             binding.todoTxt.setTextColor(ContextCompat.getColor(binding.root.context, R.color.gray))
+            binding.deadline.isVisible = false
         } else {
             binding.todoTxt.paint.isStrikeThruText = false
-            binding.todoTxt.setTextColor(ContextCompat.getColor(binding.root.context, R.color.black))
+            binding.todoTxt.setTextColor(ContextCompat.getColor(binding.root.context, if (isDarkTheme(binding.root.context)) R.color.white else R.color.black))
+            binding.deadline.isVisible = true
         }
 
         binding.todoTxt.setOnClickListener {
             callbacks.onTodoItemClicked(todoItem)
         }
+    }
+
+    private fun isDarkTheme(context: Context): Boolean {
+        val uiMode = context.resources.configuration.uiMode
+        return uiMode and Configuration.UI_MODE_NIGHT_MASK == Configuration.UI_MODE_NIGHT_YES
     }
 }
 

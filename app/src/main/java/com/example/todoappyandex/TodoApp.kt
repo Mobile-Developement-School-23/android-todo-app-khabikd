@@ -1,8 +1,11 @@
 package com.example.todoappyandex
 
 import android.app.Application
+import android.app.NotificationChannel
+import android.app.NotificationManager
 import android.content.Context
 import android.content.SharedPreferences
+import android.os.Build
 import com.example.todoappyandex.data.ConnectionManager
 import com.example.todoappyandex.data.TodoRepository
 import com.example.todoappyandex.data.local.AppDatabase
@@ -45,6 +48,17 @@ class TodoApp: Application() {
         appComponent.inject(this)
         setupConnectivityMonitoring(todoRepository)
         syncDataWorkerProvider.startPeriodicUpdateData()
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            val notificationChannel = NotificationChannel("channel_id",
+                    getString(R.string.notification_channel_name),
+                    NotificationManager.IMPORTANCE_HIGH
+                ).apply {
+                    description = applicationContext.getString(R.string.notification_channel_description)
+                }
+            val notificationManager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+            notificationManager.createNotificationChannel(notificationChannel)
+        }
     }
 
     private fun setupConnectivityMonitoring(todoItemRepository: TodoRepository) {
